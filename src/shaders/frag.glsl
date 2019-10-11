@@ -63,11 +63,7 @@ vec3 rep(in vec3 p, in vec3 c) {
 }
 
 float scene(vec3 p) {
-	//p.z += sin(time.x / 10.0) * sin(time.x / 10.0) * 20.0;
-
-	float o_plane = p.y + 2.9;
-
-	vec3 q = rep(p, vec3(8.0, 0.0, 8.0));
+	vec3 q = rep(p, vec3(8.0, 8.0, 8.0));
     vec3 rp = rotateY(time.x + sin(time.x)) * q;
 
 	float o_octa = max(
@@ -87,7 +83,7 @@ float scene(vec3 p) {
 		id = 1;
 	}
 
-    return min(o_plane, o_octa);
+    return o_octa;
 }
 
 float shortest_dist(vec3 eye, vec3 dir, float start, float end) {
