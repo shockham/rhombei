@@ -79,10 +79,6 @@ float scene(vec3 p) {
 		0.4), 0.2), 0.05)
 	);
 
-	if(o_octa >= o_plane) {
-		id = 1;
-	}
-
     return o_octa;
 }
 
