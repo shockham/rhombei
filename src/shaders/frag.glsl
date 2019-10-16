@@ -16,7 +16,7 @@ const float round = 0.6;
 const float size = 1.0;
 const vec2 dimensions = vec2(1000.0, 1000.0);
 
-uniform vec4 time;
+uniform float time;
 
 varying vec3 vposition;
 varying vec3 vcolor;
@@ -64,17 +64,17 @@ vec3 rep(in vec3 p, in vec3 c) {
 
 float scene(vec3 p) {
 	vec3 q = rep(p, vec3(8.0, 8.0, 8.0));
-    vec3 rp = rotateY(time.x + sin(time.x)) * q;
+    vec3 rp = rotateY(time + sin(time)) * q;
 
 	float o_octa = max(
 		-box(
-            q + vec3(0.0, -0.7 - sin(time.x / 2.6), 0.0),
+            q + vec3(0.0, -0.7 - sin(time / 2.6), 0.0),
             vec3(2.0, 0.5, 2.0)
         ),
 		onion(onion(onion(
 			octa(
-				rp + disp(q, displ * abs(cos(time.x / 8.0))),
-				round + 0.8 + cos(time.x / 3.69) * 0.5
+				rp + disp(q, displ * abs(cos(time / 8.0))),
+				round + 0.8 + cos(time / 3.69) * 0.5
 			),
 		0.4), 0.2), 0.05)
 	);
@@ -158,9 +158,9 @@ vec3 lighting(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 eye) {
 
     float occ = calc_AO(p, normal);
 
-    vec3 light_pos = vec3(4.0 * sin(time.x),
+    vec3 light_pos = vec3(4.0 * sin(time),
                           5.0,
-                          4.0 * cos(time.x));
+                          4.0 * cos(time));
     vec3 light_intensity = vec3(light);
 
 
@@ -177,10 +177,10 @@ vec3 lighting(vec3 k_a, vec3 k_d, vec3 k_s, float alpha, vec3 p, vec3 eye) {
     color = mix(
         color,
         color * occ * softshadow(p, normalize(light_pos), 0.02, 5.0),
-        light// + tan(time.x / 7.2) * 4.0
+        light// + tan(time / 7.2) * 4.0
     );
 
-    color = mix(color, vec3(rand(vposition.xy * time.x)), noise);
+    color = mix(color, vec3(rand(vposition.xy * time)), noise);
 
     return color;
 }
@@ -221,9 +221,9 @@ void main() {
 
     vec3 input_cam_pos = vec3(1.0, 0.6, 1.0);
     vec3 cam_pos = vec3(
-        (cos(input_cam_pos.x) * cos(input_cam_pos.y)) + cos(time.x / 8.5),
-        input_cam_pos.y - 0.25 + (sin(time.x / 3.5) * 0.25),
-        (sin(input_cam_pos.x) * cos(input_cam_pos.y)) + sin(time.x / 12.2)
+        (cos(input_cam_pos.x) * cos(input_cam_pos.y)) + cos(time / 8.5),
+        input_cam_pos.y - 0.25 + (sin(time / 3.5) * 0.25),
+        (sin(input_cam_pos.x) * cos(input_cam_pos.y)) + sin(time / 12.2)
     ) * distance;
 
     mat4 view_mat = view_matrix(cam_pos, vec3(5.0, 0.0, 5.0), vec3(0.0, 1.0, 0.0));
